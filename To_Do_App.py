@@ -1,3 +1,5 @@
+import datetime
+
 
 lst = []
 lst_work = []
@@ -5,15 +7,17 @@ lst_personal = []
 lst_urgent = []
 lst_none = []
 
+
 class Task: 
-    def __init__(self, name, description, tag, status):
+    def __init__(self, name, description, tag, status, date_time):
         self.name = name
         self.description = description
         self.tag = tag
         self.status = status
+        self.date_time = date_time
 
     def __str__(self):
-        return f"\nName: {self.name} \nDescription: {self.description} \nTag: {self.tag} \nStatus: {self.status}"
+        return f"\nName: {self.name} \nDescription: {self.description} \nTag: {self.tag} \nStatus: {self.status} \nDate/Time: {self.date_time}"
 
 
 def status(status):
@@ -30,9 +34,9 @@ def status(status):
         else:
             print("\nError\n")
             status = input("Status: "
-                           "Press 1 for Pending \n"
-                           "        Press 2 for In Progress \n"
-                           "        Press 3 for Completed \n"
+                           "1. Pending \n"
+                           "        2. In Progress \n"
+                           "        3. Completed \n"
                            "        Command: ")
     return status
 
@@ -54,10 +58,10 @@ def tag(tag):
         else:
             print("\nError\n")
             tag = input("Tag: "
-                           "Press 1 for Work \n"
-                           "     Press 2 for Personal \n"
-                           "     Press 3 for Urgent \n"
-                           "     Press 4 for None \n"
+                           "1. Work \n"
+                           "     2. Personal \n"
+                           "     3. Urgent \n"
+                           "     4. None \n"
                            "     Command: ")
     return tag
 
@@ -74,11 +78,13 @@ def task_number():
 def add_task(task_name, task_description, task_tag, task_status):
     task_tag = tag(task_tag)
     task_status = status(task_status)
-    lst.append(Task(task_name, task_description, task_tag, task_status))
+    lst.append(Task(task_name, task_description, task_tag, task_status, datetime.datetime.now()))
     
 
 def view_tasks():
     print("\nTASKS:")
+    #print(datetime.datetime.now())
+    #print(datetime.datetime(2025, 4, 18))
     for x in range(len(lst)):
         print("\nTask "+ str(x + 1) + ":", lst[x])
 
@@ -106,10 +112,10 @@ def prioritise_tasks():
             lst_none.append(lst[x])
 
     while(True):
-        priority = input("\nPress 1 for Work Priority\n"
-                         "Press 2 for Personal Priority\n"
-                         "Press 3 for Urgent Priority\n"
-                         "Press 4 for None Priority\n"
+        priority = input("\n1. Work Priority\n"
+                         "2. Personal Priority\n"
+                         "3. Urgent Priority\n"
+                         "4. None Priority\n"
                          "Command: ")
         if(priority == "1"):
             for x in range(len(lst_work)):
@@ -179,9 +185,9 @@ def prioritise_tasks():
 
 def search():
     while(True):
-        task_search = input("\nPress 1 to Search by Name\n"
-                            "Press 2 to Search by Description\n"
-                            "Press 3 to Search by Tag\n"
+        task_search = input("\n1. Search by Name\n"
+                            "2. Search by Description\n"
+                            "3. Search by Tag\n"
                             "Command: ")
 
         if(task_search == "1"):
@@ -194,9 +200,11 @@ def search():
                         lst[x] = lst[num]
                         lst[num] = temp
                         num += 1
-                    view_tasks()
-                    return False
-                print("\nThere are no more tasks with that name")
+                    else:
+                        print("\nThere are no tasks with that name")
+
+                view_tasks()
+                return False
 
         elif(task_search == "2"):
             while(True):
@@ -208,9 +216,11 @@ def search():
                         lst[x] = lst[num]
                         lst[num] = temp
                         num += 1
-                    view_tasks()
-                    return False
-                print("\nThere are no more tasks with that description")
+                    else:
+                        print("\nThere are no tasks with that description")
+
+                view_tasks()
+                return False
 
         elif(task_search == "3"):
             while(True):
@@ -222,9 +232,11 @@ def search():
                         lst[x] = lst[num]
                         lst[num] = temp
                         num += 1
-                    view_tasks()
-                    return False
-                print("\nThere are no more tasks with that tag")
+                    else:
+                        print("\nThere are no more tasks with that tag")
+
+                view_tasks()
+                return False
 
         else:
             print("\nError\n")
@@ -232,28 +244,28 @@ def search():
 
 def main():
     while(True):
-        command = input("Press 1 to Add Task\n"
-                        "Press 2 to View Tasks\n"
-                        "Press 3 to Update Task\n"
-                        "Press 4 to Delete Task\n"
-                        "Press 5 to Prioritise Tasks\n"
-                        "Press 6 to Search Tasks\n"
-                        "Press 7 to Exit\n"
+        command = input("1. Add Task\n"
+                        "2. View Tasks\n"
+                        "3. Update Task\n"
+                        "4. Delete Task\n"
+                        "5. Prioritise Tasks\n"
+                        "6. Search Tasks\n"
+                        "7. Exit\n"
                         "Command: ")
 
         if(command == "1"):  # Add Task
             add_task(input("\nName: "), 
                      input("Description: "), 
-                     input("Tag: "
-                           "Press 1 for Work \n"
-                           "     Press 2 for Personal \n"
-                           "     Press 3 for Urgent \n"
-                           "     Press 4 for None \n"
+                     input("\nTag: "
+                           "1. Work \n"
+                           "     2. Personal \n"
+                           "     3. Urgent \n"
+                           "     4. None \n"
                            "     Command: "),
-                     input("Status: "
-                           "Press 1 for Pending \n"
-                           "        Press 2 for In Progress \n"
-                           "        Press 3 for Completed \n"
+                     input("\nStatus: "
+                           "1. Pending \n"
+                           "        2. In Progress \n"
+                           "        3. Completed \n"
                            "        Command: "))
 
         elif(command == "2"):  # View Tasks
@@ -270,16 +282,16 @@ def main():
                 update_task(task_num,
                             input("\nNew Name: "), 
                             input("New Description: "),
-                            input("New Tag: \n"
-                                  "Press 1 for Work Priority\n"
-                                  "Press 2 for Personal Priority\n"
-                                  "Press 3 for Urgent Priority\n"
-                                  "Press 4 for None Priority\n"
+                            input("\nNew Tag: \n"
+                                  "1. Work Priority\n"
+                                  "2. Personal Priority\n"
+                                  "3. Urgent Priority\n"
+                                  "4. None Priority\n"
                                   "Command: "),
-                            input("New Status: "
-                                  "Press 1 for Pending \n"
-                                  "        Press 2 for In Progress \n"
-                                  "        Press 3 for Completed \n"
+                            input("\nNew Status: "
+                                  "1. Pending \n"
+                                  "        2. In Progress \n"
+                                  "        3. Completed \n"
                                   "        Command: "))
 
         elif(command == "4"):  # Delete Task
