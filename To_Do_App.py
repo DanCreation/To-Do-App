@@ -20,67 +20,66 @@ class Task:
         return f"\nName: {self.name} \nDescription: {self.description} \nTag: {self.tag} \nStatus: {self.status} \nDate/Time: {self.date_time}"
 
 
-def status(status):
-    while(True):
-        if(status == "1"): 
-            status = "Pending"
-            break
-        elif(status == "2"):
-            status = "In Progress"
-            break
-        elif(status == "3"):
-            status = "Completed"
-            break
-        else:
-            print("\nError\n")
-            status = input("Status: "
-                           "1. Pending \n"
-                           "        2. In Progress \n"
-                           "        3. Completed \n"
-                           "        Command: ")
-    return status
+def get_task_number():
+    try:
+        task_number = int(input("\nTask Number: "))
+        if(task_number < len(lst) or task_number > len(lst)):
+            raise ValueError("\nInvalid Input.")
+        return task_number
+    except ValueError as e:
+        print(e)
+        return get_task_number()
 
 
-def tag(tag):
-    while(True):
-        if(tag == "1"): 
+def get_name():
+    return input("\nName: ")
+
+
+def get_description():
+    return input("\nDescription: ")
+
+
+def get_tag():
+    try:
+        tag = int(input("\nTag:\n1. Work\n2.Personal\n3. Urgent\n4. None\nCommand: "))
+        if(tag <= 0 or tag > 4):
+            raise ValueError("\nInvalid Input.")
+        elif(tag == 1): 
             tag = "Work"
-            break
-        elif(tag == "2"):
+        elif(tag == 2):
             tag = "Personal"
-            break
-        elif(tag == "3"):
+        elif(tag == 3):
             tag = "Urgent"
-            break
-        elif(tag == "4"):
+        elif(tag == 4):
             tag = "None"
-            break
-        else:
-            print("\nError\n")
-            tag = input("Tag: "
-                           "1. Work \n"
-                           "     2. Personal \n"
-                           "     3. Urgent \n"
-                           "     4. None \n"
-                           "     Command: ")
-    return tag
+        return tag
+    except ValueError as e:
+        print(e)
+        return get_tag()
 
 
-def task_number():
-    while(True):
-        task_num = input("\nTask Number: ")
-        if(task_num.isdigit() and int(task_num) > 0 and int(task_num) <= len(lst)):
-            return False
-        else:
-            print("\nError\n")
+def get_status():
+    try:
+        status = int(input("\nStatus:\n1. Pending\n2. In Progress\n3. Completed\nCommand: "))
+        if(status <= 0 or status > 3):
+            raise ValueError("\nInvalid input.")
+        if(status == 1): 
+            status = "Pending"
+        elif(status == 2):
+            status = "In Progress"
+        elif(status == 3):
+            status = "Completed"
+        return status
+    except ValueError as e:
+        print(e)
+        return get_status()
 
 
-def add_task(task_name, task_description, task_tag, task_status):
-    task_tag = tag(task_tag)
-    task_status = status(task_status)
-    lst.append(Task(task_name, task_description, task_tag, task_status, datetime.datetime.now()))
+def add_task():
+    lst.append(Task(get_name(), get_description(), get_tag(), get_status(),
+                   datetime.datetime.now()))
+
     
-
 def view_tasks():
     print("\nTASKS:")
     #print(datetime.datetime.now())
@@ -89,11 +88,10 @@ def view_tasks():
         print("\nTask "+ str(x + 1) + ":", lst[x])
 
 
-def update_task(task_num, new_name, new_description, new_tag, new_status):
-    lst[task_num - 1].name = new_name
-    lst[task_num - 1].description = new_description
-    lst[task_num - 1].tag = tag(new_tag)
-    lst[task_num - 1].status = status(new_status)
+def update_task():
+    task_num = get_task_number()
+    lst[task_num - 1] = Task(get_name(), get_description(), get_tag(),
+                            get_status(), datetime.datetime.now())
 
 
 def delete_task(number):
@@ -223,20 +221,21 @@ def search():
                 return False
 
         elif(task_search == "3"):
-            while(True):
-                search_tag = input("Tag: ")
-                num = 0
-                for x in range(len(lst)):
-                    if(search_tag == lst[x].tag):
-                        temp = lst[x]
-                        lst[x] = lst[num]
-                        lst[num] = temp
-                        num += 1
-                    else:
-                        print("\nThere are no more tasks with that tag")
+            prioritise_tasks()
+            # while(True):
+            #     search_tag = input("Tag: ")
+            #     num = 0
+            #     for x in range(len(lst)):
+            #         if(search_tag == lst[x].tag):
+            #             temp = lst[x]
+            #             lst[x] = lst[num]
+            #             lst[num] = temp
+            #             num += 1
+            #         else:
+            #             print("\nThere are no more tasks with that tag")
 
-                view_tasks()
-                return False
+            #     view_tasks()
+            return False
 
         else:
             print("\nError\n")
@@ -244,76 +243,49 @@ def search():
 
 def main():
     while(True):
-        command = input("1. Add Task\n"
-                        "2. View Tasks\n"
-                        "3. Update Task\n"
-                        "4. Delete Task\n"
-                        "5. Prioritise Tasks\n"
-                        "6. Search Tasks\n"
-                        "7. Exit\n"
-                        "Command: ")
-
-        if(command == "1"):  # Add Task
-            add_task(input("\nName: "), 
-                     input("Description: "), 
-                     input("\nTag: "
-                           "1. Work \n"
-                           "     2. Personal \n"
-                           "     3. Urgent \n"
-                           "     4. None \n"
-                           "     Command: "),
-                     input("\nStatus: "
-                           "1. Pending \n"
-                           "        2. In Progress \n"
-                           "        3. Completed \n"
-                           "        Command: "))
-
-        elif(command == "2"):  # View Tasks
-            if(len(lst) == 0):
-                print("\nThere are no tasks to view")
-            else:
-                view_tasks()
-
-        elif(command == "3"):  # Update Task
-            if(len(lst) == 0):
-                print("\nThere are no tasks to update")
-            else:
-                task_num = task_number()
-                update_task(task_num,
-                            input("\nNew Name: "), 
-                            input("New Description: "),
-                            input("\nNew Tag: \n"
-                                  "1. Work Priority\n"
-                                  "2. Personal Priority\n"
-                                  "3. Urgent Priority\n"
-                                  "4. None Priority\n"
-                                  "Command: "),
-                            input("\nNew Status: "
-                                  "1. Pending \n"
-                                  "        2. In Progress \n"
-                                  "        3. Completed \n"
-                                  "        Command: "))
-
-        elif(command == "4"):  # Delete Task
-            if(len(lst) == 0):
-                print("\nThere are no tasks to delete")
-            else:
-                delete_task(int(input("\nTask Number: ")))
-
-        elif(command == "5"):  # Prioritise
-            if(len(lst) == 0):
-                print("\nThere are no tasks to prioritise")
-            else:
-                prioritise_tasks()
-        
-        elif(command == "6"):  # Search
-            search()
-        elif(command == "7"):  # Exit
-            return False
-
-        else:
-            print("\nError")
-        print("")
+        try:
+            command = int(input("\n1. Add Task\n"
+                            "2. View Tasks\n"
+                            "3. Update Task\n"
+                            "4. Delete Task\n"
+                            "5. Prioritise Tasks\n"
+                            "6. Search Tasks\n"
+                            "7. Exit\n"
+                            "Command: "))
+            if(command <= 0 or command > 7):
+                raise ValueError("\nInvalid Input.")
+            match command:
+                case 1:  # ADD TASK
+                    add_task()
+                case 2:  # VIEW TASKS
+                    if(len(lst) == 0):
+                        print("\nThere are no tasks to view")
+                    else:
+                        view_tasks()
+                case 3:  # UPDATE TASK
+                    if(len(lst) == 0):
+                        print("\nThere are no tasks to update")
+                    else:
+                        update_task()
+                case 4:  # DELETE TASK
+                    if(len(lst) == 0):
+                        print("\nThere are no tasks to delete")
+                    else:
+                        delete_task(int(input("\nTask Number: ")))
+                case 5:  # PRIORITISE TASK
+                    if(len(lst) == 0):
+                        print("\nThere are no tasks to prioritise")
+                    else:
+                        prioritise_tasks()
+                case 6:  # SEARCH
+                    if(len(lst) == 0):
+                        print("\nThere are no tasks to search")
+                    else:
+                        search()
+                case 7:  # EXIT
+                    return False
+        except ValueError as e:
+            print(e)
 
 
 main()
