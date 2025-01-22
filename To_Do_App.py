@@ -2,10 +2,6 @@ import datetime
 
 
 lst = []
-lst_work = []
-lst_personal = []
-lst_urgent = []
-lst_none = []
 
 
 class Task: 
@@ -37,6 +33,10 @@ def get_name():
 
 def get_description():
     return input("\nDescription: ")
+
+
+def get_deadline():  # Not Finished
+    return input("\nDeadline (dd-mm-yyyy): ")
 
 
 def get_tag():
@@ -77,7 +77,7 @@ def get_status():
 
 def add_task():
     lst.append(Task(get_name(), get_description(), get_tag(), get_status(),
-                   datetime.datetime.now()))
+                   datetime.datetime.now().strftime("%d-%m-%Y %H:%M")))
 
     
 def view_tasks():
@@ -98,118 +98,18 @@ def delete_task(number):
     lst.pop(number - 1)
 
 
-def prioritise_tasks():
+def prioritise(tag):
+    num = 0
     for x in range(len(lst)):
-        if(lst[x].tag == "Work"):
-            lst_work.append(lst[x])
-        elif(lst[x].tag == "Personal"):
-            lst_personal.append(lst[x])
-        elif(lst[x].tag == "Urgent"):
-            lst_urgent.append(lst[x])
-        else:
-            lst_none.append(lst[x])
-
-    while(True):
-        priority = input("\n1. Work Priority\n"
-                         "2. Personal Priority\n"
-                         "3. Urgent Priority\n"
-                         "4. None Priority\n"
-                         "Command: ")
-        if(priority == "1"):
-            temp = []
-            for x in range(len(lst_work)):
-                temp.append(lst[x])
-                lst[x] = lst_work[x]
-            lst.append(temp)
-            temp.clear()
-            lst_work.clear()
-            # for x in range(len(lst_work)):
-            #     lst[x] = lst_work[x]
-            # for x in range(len(lst_personal)):
-            #     lst[x + len(lst_work)] = lst_personal[x]
-            # for x in range(len(lst_urgent)):
-            #     lst[x + len(lst_work) + len(lst_personal)] = lst_urgent[x]
-            # for x in range(len(lst_none)):
-            #     lst[x + len(lst_work) + len(lst_personal) + len(lst_urgent)] = lst_none[x]
-            # lst_work.clear()
-            # lst_personal.clear()
-            # lst_urgent.clear()
-            # lst_none.clear()
-            break
-
-        elif(priority == "2"):
-            temp = []
-            for x in range(len(lst_personal)):
-                temp.append(lst[x])
-                lst[x] = lst_personal[x]
-            lst.append(temp)
-            temp.clear()
-            lst_personal.clear()
-            # for x in range(len(lst_personal)):
-            #     lst[x] = lst_personal[x]
-            # for x in range(len(lst_urgent)):
-            #     lst[x + len(lst_personal)] = lst_urgent[x]
-            # for x in range(len(lst_none)):
-            #     lst[x + len(lst_personal) + len(lst_urgent)] = lst_none[x]
-            # for x in range(len(lst_work)):
-            #     lst[x + len(lst_personal) + len(lst_urgent) + len(lst_none)] = lst_work[x]
-            # lst_work.clear()
-            # lst_personal.clear()
-            # lst_urgent.clear()
-            # lst_none.clear()
-            break
-
-        elif(priority == "3"):
-            temp = []
-            for x in range(len(lst_urgent)):
-                temp.append(lst[x])
-                lst[x] = lst_urgent[x]
-            lst.append(temp)
-            temp.clear()
-            lst_urgent.clear()
-            # for x in range(len(lst_urgent)):
-            #     lst[x] = lst_urgent[x]
-            # for x in range(len(lst_none)):
-            #     lst[x + len(lst_urgent)] = lst_none[x]
-            # for x in range(len(lst_work)):
-            #     lst[x + len(lst_urgent) + len(lst_none)] = lst_work[x]
-            # for x in range(len(lst_personal)):
-            #     lst[x + len(lst_urgent) + len(lst_none) + len(lst_work)] = lst_personal[x]
-            # lst_work.clear()
-            # lst_personal.clear()
-            # lst_urgent.clear()
-            # lst_none.clear()
-            break
-
-        elif(priority == "4"):
-            temp = []
-            for x in range(len(lst_none)):
-                temp.append(lst[x])
-                lst[x] = lst_none[x]
-            lst.append(temp)
-            temp.clear()
-            lst_none.clear()
-            # for x in range(len(lst_none)):
-            #     lst[x] = lst_none[x]
-            # for x in range(len(lst_work)):
-            #     lst[x + len(lst_none)] = lst_work[x]
-            # for x in range(len(lst_personal)):
-            #     lst[x + len(lst_none) + len(lst_work)] = lst_personal[x]
-            # for x in range(len(lst_urgent)):
-            #     lst[x + len(lst_none) + len(lst_work) + len(lst_personal)] = lst_urgent[x]
-            # lst_work.clear()
-            # lst_personal.clear()
-            # lst_urgent.clear()
-            # lst_none.clear()
-            break
-            
-        else:
-            print("\nError\n")
-
+        if(lst[x].tag == tag):
+            temp = lst[num]
+            lst[num] = lst[x]
+            lst[x] = temp
+            num += 1
     view_tasks()
 
 
-def search():
+def search():  # Not finished
     while(True):
         task_search = input("\n1. Search by Name\n"
                             "2. Search by Description\n"
@@ -258,65 +158,17 @@ def search():
                 if(search_tag <= 0 or search_tag > 4):
                     raise ValueError("\nInvalid Input")
                 elif(search_tag == 1):
-                    num = 0
-                    for x in range(len(lst)):
-                        if(lst[x].tag == "Work"):
-                            temp = lst[num]
-                            lst[num] = lst[x]
-                            lst[x] = temp
-                            num += 1
-                        else:
-                            print("There are no tasks with that tag.")
+                    prioritise("Work")
                 elif(search_tag == 2):
-                    num = 0
-                    for x in range(len(lst)):
-                        if(lst[x].tag == "Personal"):
-                            temp = lst[num]
-                            lst[num] = lst[x]
-                            lst[x] = temp
-                            num += 1
-                        else:
-                            print("There are no tasks with that tag.")
+                    prioritise("Personal")
                 elif(search_tag == 3):
-                    num = 0
-                    for x in range(len(lst)):
-                        if(lst[x].tag == "Urgent"):
-                            temp = lst[num]
-                            lst[num] = lst[x]
-                            lst[x] = temp
-                            num += 1
-                        else:
-                            print("There are no tasks with that tag.")
+                    prioritise("Urgent")
                 elif(search_tag == 4):
-                    num = 0
-                    for x in range(len(lst)):
-                        if(lst[x].tag == "None"):
-                            temp = lst[num]
-                            lst[num] = lst[x]
-                            lst[x] = temp
-                            num += 1
-                        else:
-                            print("There are no tasks with that tag.")
+                    prioritise("None")
                 return search_tag
             except ValueError as e:
                 print(e)
-
-            #prioritise_tasks()
-            # while(True):
-            #     search_tag = input("Tag: ")
-            #     num = 0
-            #     for x in range(len(lst)):
-            #         if(search_tag == lst[x].tag):
-            #             temp = lst[x]
-            #             lst[x] = lst[num]
-            #             lst[num] = temp
-            #             num += 1
-            #         else:
-            #             print("\nThere are no more tasks with that tag")
-
-            #     view_tasks()
             return False
-
         else:
             print("\nError\n")
 
@@ -328,9 +180,8 @@ def main():
                             "2. View Tasks\n"
                             "3. Update Task\n"
                             "4. Delete Task\n"
-                            "5. Prioritise Tasks\n"
-                            "6. Search Tasks\n"
-                            "7. Exit\n"
+                            "5. Search Tasks\n"
+                            "6. Exit\n"
                             "Command: "))
             if(command <= 0 or command > 7):
                 raise ValueError("\nInvalid Input.")
@@ -352,20 +203,15 @@ def main():
                         print("\nThere are no tasks to delete")
                     else:
                         delete_task(int(input("\nTask Number: ")))
-                case 5:  # PRIORITISE TASK
-                    if(len(lst) == 0):
-                        print("\nThere are no tasks to prioritise")
-                    else:
-                        prioritise_tasks()
-                case 6:  # SEARCH
+                case 5:  # SEARCH
                     if(len(lst) == 0):
                         print("\nThere are no tasks to search")
                     else:
                         search()
-                case 7:  # EXIT
+                case 6:  # EXIT
                     return False
         except ValueError as e:
             print(e)
 
-
-main()
+if(__name__ == "__main__"):
+    main()
