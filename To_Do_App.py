@@ -2,7 +2,12 @@ import datetime
 
 
 lst = []
-
+day = 0
+month = 0
+year = 0
+hour = 0
+minute = 0
+deadline = f"{day}-{month}-{year} {hour}:{minute}"
 
 class Task: 
     def __init__(self, name, description, tag, status, date_time):
@@ -36,7 +41,10 @@ def get_description():
 
 
 def get_deadline():  # Not Finished
-    return input("\nDeadline (dd-mm-yyyy): ")
+    #deadline = input(f"Deadline (dd-mm-yyyy): {input('Day (dd): ')}-{input('Month (mm): ')}-{input('Year (yyyy): ')}")
+    deadline = datetime.datetime().strptime(f"Deadline (dd-mm-yyyy) (hh:mm): {input('Day (dd): ')}-{input('Month (mm): ')}-{input('Year (yyyy): ')}","%d-%m-%Y %H:%M")
+        
+    return deadline
 
 
 def get_tag():
@@ -98,57 +106,47 @@ def delete_task(number):
     lst.pop(number - 1)
 
 
-def prioritise(tag):
+def get_priority(priority, user_input):
     num = 0
-    for x in range(len(lst)):
-        if(lst[x].tag == tag):
-            temp = lst[num]
-            lst[num] = lst[x]
-            lst[x] = temp
-            num += 1
+    if(priority == "name"):
+        for x in range(len(lst)):
+            if(lst[x].name.find(user_input) != -1):
+                temp = lst[num]
+                lst[num] = lst[x]
+                lst[x] = temp
+                num += 1
+    elif(priority == "description"):
+        for x in range(len(lst)):
+            if(lst[x].description.find(user_input) != -1):
+                temp = lst[num]
+                lst[num] = lst[x]
+                lst[x] = temp
+                num += 1
+    elif(priority == "tag"):
+        for x in range(len(lst)):
+            if(lst[x].tag == user_input):
+                temp = lst[num]
+                lst[num] = lst[x]
+                lst[x] = temp
+                num += 1
     view_tasks()
 
 
-def search():  # Not finished
-    while(True):
-        task_search = input("\n1. Search by Name\n"
+def search():
+    try:
+        task_search = int(input("\n1. Search by Name\n"
                             "2. Search by Description\n"
                             "3. Search by Tag\n"
-                            "Command: ")
+                            "Command: "))
+        if(task_search <= 0 or task_search > 3):
+            raise ValueError("\nInvalid Input.")
+        elif(task_search == 1):
+            get_priority("name", input("Name: "))
 
-        if(task_search == "1"):
-            while(True):
-                search_name = input("\nName: ")
-                num = 0
-                for x in range(len(lst)):
-                    if(search_name == lst[x].name):
-                        temp = lst[x]
-                        lst[x] = lst[num]
-                        lst[num] = temp
-                        num += 1
-                    else:
-                        print("\nThere are no tasks with that name")
+        elif(task_search == 2):
+            get_priority("description", input("Description: "))
 
-                view_tasks()
-                return False
-
-        elif(task_search == "2"):
-            while(True):
-                search_description = input("Description: ")
-                num = 0
-                for x in range(len(lst)):
-                    if(search_description == lst[x].description):
-                        temp = lst[x]
-                        lst[x] = lst[num]
-                        lst[num] = temp
-                        num += 1
-                    else:
-                        print("\nThere are no tasks with that description")
-
-                view_tasks()
-                return False
-
-        elif(task_search == "3"):
+        elif(task_search == 3):
             try:
                 search_tag = int(input("\n1. Work\n"
                          "2. Personal\n"
@@ -158,21 +156,22 @@ def search():  # Not finished
                 if(search_tag <= 0 or search_tag > 4):
                     raise ValueError("\nInvalid Input")
                 elif(search_tag == 1):
-                    prioritise("Work")
+                    get_priority("tag", "Work")
                 elif(search_tag == 2):
-                    prioritise("Personal")
+                    get_priority("tag", "Personal")
                 elif(search_tag == 3):
-                    prioritise("Urgent")
+                    get_priority("tag", "Urgent")
                 elif(search_tag == 4):
-                    prioritise("None")
+                    get_priority("tag", "None")
                 return search_tag
             except ValueError as e:
                 print(e)
-            return False
-        else:
-            print("\nError\n")
-
-
+                search()
+    except ValueError as e:
+        print(e)
+        search()
+            
+        
 def main():
     while(True):
         try:
@@ -188,6 +187,7 @@ def main():
             match command:
                 case 1:  # ADD TASK
                     add_task()
+                    get_deadline()
                 case 2:  # VIEW TASKS
                     if(len(lst) == 0):
                         print("\nThere are no tasks to view")
