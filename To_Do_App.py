@@ -41,15 +41,21 @@ def get_description():
     return input("\nDescription: ")
 
 
-def get_deadline():
+def get_deadline():  # NOT FINISHED
     deadline_format = "%d-%m-%Y"
     deadline = input("\nDeadline (dd-mm-yyyy): ")
     correct_format = True
+    # if(check_deadline(deadline) == False):
+    #         print("\nThe Deadline cannot be set in the past.")
+    #         get_deadline()
     try:
-        correct_format == bool(datetime.datetime.strptime(deadline, deadline_format))
+        if(correct_format == bool(datetime.datetime.strptime(deadline, deadline_format))):
+            if(check_deadline(deadline) == False):
+                raise ValueError("\nThe deadline cannot be set in the past.")
+            raise ValueError("\nIncorrect format. Please enter the date as dd-mm-yyyy.")
         return deadline
-    except ValueError:
-        print("\nIncorrect format. Please enter the date as dd-mm-yyyy.")
+    except ValueError as e:
+        #print("\nIncorrect format. Please enter the date as dd-mm-yyyy.")
         get_deadline()
     
 
@@ -110,14 +116,35 @@ def update_task():
 
 def delete_task(number):
     lst.pop(number - 1)
+    
+
+def check_deadline(deadline):  # NOT FINISHED
+    due_number = str(deadline)
+    due_day = due_number[0] + due_number[1]
+    due_month = due_number[3] + due_number[4]
+    due_year = due_number[6] + due_number[7] + due_number[8] + due_number[9]
+
+    present_number = str(datetime.datetime.now().strftime("%d-%m-%Y"))
+    present_day = present_number[0] + present_number[1]
+    present_month = present_number[3] + present_number[4]
+    present_year = present_number[6] + present_number[7] + present_number[8] + present_number[9]
+
+    if(due_year < present_year):
+        return False
+    elif(due_year == present_year and due_month < present_month):
+        return False
+    elif(due_year == present_year and due_month == present_month and due_day < present_day):
+        return False
+    else:
+        return True
 
 
-def get_sorted_dates(date_lst):  # NOT FINISHED
+def get_sorted_dates(date_lst):
     split_lst = date_lst.split("-")
     return split_lst[2], split_lst[1], split_lst[0]
 
 
-def get_priority(priority, user_input):  # NOT FINISHED
+def get_priority(priority, user_input):
     num = 0
     if(priority == "name"):
         for x in range(len(lst)):
@@ -149,15 +176,41 @@ def get_priority(priority, user_input):  # NOT FINISHED
                 num += 1
     elif(priority == "deadline"):
         for x in range(len(lst)):
-            if(lst[x].deadline.find(user_input) != -1):
-                temp = lst[num]
-                lst[num] = lst[x]
-                lst[x] = temp
+            deadline_lst.append(lst[x].deadline)
+
+        deadline_lst.sort(key=get_sorted_dates)
+        reversed_list = list(reversed(deadline_lst))
+        if(user_input == "closest"):
+            for x in range(len(deadline_lst)):
+                for y in range(len(lst)):
+                    if(lst[y].deadline == deadline_lst[x]):
+                        temp = lst[num]
+                        lst[num] = lst[y]
+                        lst[y] = temp
                 num += 1
+                    
+        elif(user_input == "furthest"):
+            for x in range(len(reversed_list)):
+                for y in range(len(lst)):
+                    if(lst[y].deadline == reversed_list[x]):
+                        temp = lst[num]
+                        lst[num] = lst[y]
+                        lst[y] = temp
+                num += 1
+
+        else:
+            for x in range(len(lst)):
+                if(lst[x].deadline.find(user_input) != -1):
+                    temp = lst[num]
+                    lst[num] = lst[x]
+                    lst[x] = temp
+                    num += 1
+                    
+    deadline_lst.clear()
     view_tasks()
 
 
-def search():  # NOT FINISHED
+def search():
     try:
         task_search = int(input("\n1. Search by Name\n"
                             "2. Search by Description\n"
@@ -215,24 +268,19 @@ def search():  # NOT FINISHED
                 search()
 
         elif(task_search == 5):  # NOT FINISHED
-            for x in range(len(lst)):
-                deadline_lst.append(lst[x].deadline)
-            deadline_lst.sort(key=get_sorted_dates)
             try:
                 order = int(input("\n1. Closest Deadlines\n"
                                   "2. Furthest Deadlines\n"
+                                  "3. Manual Search\n"
                                   "Command: "))
-                if(order <= 0 or order > 2):
+                if(order <= 0 or order > 3):
                     raise ValueError("Invalid Input.")
                 elif(order == 1):
-                    for x in range(len(lst)):
-                        for x in range(len(deadline_lst)):
-                            if
-                    #test = list(reversed(deadline_lst))
-                    #print(test)
-                    #get_priority("deadline", input("Deadline: "))
+                    get_priority("deadline", "closest")
                 elif(order == 2):
-                    pass
+                    get_priority("deadline", "furthest")
+                elif(order == 3):         
+                    get_priority("deadline", input("Deadline: "))
             except ValueError as e:
                 print(e)
             
