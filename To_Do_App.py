@@ -1,4 +1,5 @@
 import datetime
+import json  # NOT FINISHED
 
 
 lst = []
@@ -41,22 +42,20 @@ def get_description():
     return input("\nDescription: ")
 
 
-def get_deadline():  # NOT FINISHED
+def get_deadline():
     deadline_format = "%d-%m-%Y"
     deadline = input("\nDeadline (dd-mm-yyyy): ")
     correct_format = True
-    # if(check_deadline(deadline) == False):
-    #         print("\nThe Deadline cannot be set in the past.")
-    #         get_deadline()
     try:
-        if(correct_format == bool(datetime.datetime.strptime(deadline, deadline_format))):
-            if(check_deadline(deadline) == False):
-                raise ValueError("\nThe deadline cannot be set in the past.")
-            raise ValueError("\nIncorrect format. Please enter the date as dd-mm-yyyy.")
-        return deadline
-    except ValueError as e:
-        #print("\nIncorrect format. Please enter the date as dd-mm-yyyy.")
-        get_deadline()
+        correct_format == bool(datetime.datetime.strptime(deadline, deadline_format))
+        if(check_deadline(deadline) == True):
+            return deadline
+        else:
+            print("\nThe deadline cannot be set in the past.")
+            return get_deadline()
+    except:
+        print("\nIncorrect format. Please enter the date as dd-mm-yyyy.")
+        return get_deadline()
     
 
 def get_tag():
@@ -99,7 +98,7 @@ def add_task():
     lst.append(Task(get_name(), get_description(), get_tag(), get_status(), get_deadline(), 
                     datetime.datetime.now().strftime("%d-%m-%Y %H:%M"), 
                     datetime.datetime.now().strftime("%d-%m-%Y %H:%M")))
-
+  
     
 def view_tasks():
     print("\nTASKS:")
@@ -118,7 +117,7 @@ def delete_task(number):
     lst.pop(number - 1)
     
 
-def check_deadline(deadline):  # NOT FINISHED
+def check_deadline(deadline):
     due_number = str(deadline)
     due_day = due_number[0] + due_number[1]
     due_month = due_number[3] + due_number[4]
