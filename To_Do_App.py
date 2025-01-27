@@ -4,6 +4,7 @@ import json  # NOT FINISHED
 
 lst = []
 deadline_lst = []
+string_lst = []
 
 
 class Task: 
@@ -94,16 +95,30 @@ def get_status():
         return get_status()
 
 
-def add_task():
+def add_task():  # NOT FINISHED
     lst.append(Task(get_name(), get_description(), get_tag(), get_status(), get_deadline(), 
                     datetime.datetime.now().strftime("%d-%m-%Y %H:%M"), 
                     datetime.datetime.now().strftime("%d-%m-%Y %H:%M")))
+    for x in range(len(lst)):
+        string_lst.append(str(lst[x]))
+    data = str(string_lst)
+    task_data = open("Task_Data.txt", "a")
+    task_data.write(data)
+    task_data.close()
+    string_lst.clear()
+    # string_lst = str(lst)
+    # save = json.dumps(string_lst)
+    # with open("Tasks.json", "w") as outfile:
+    #     json.dump(save, outfile)
   
     
-def view_tasks():
-    print("\nTASKS:")
-    for x in range(len(lst)):
-        print("\nTask "+ str(x + 1) + ":", lst[x])
+def view_tasks():  # NOT FINISHED
+    load = open("Task_Data.txt", "r")
+    print(load.read())
+    load.close()
+    # print("\nTASKS:")
+    # for x in range(len(lst)):
+    #     print("\nTask "+ str(x + 1) + ":", lst[x])
 
 
 def update_task():
@@ -288,7 +303,7 @@ def search():
         search()
           
         
-def main():
+def main():  # NOT FINISHED
     while(True):
         try:
             command = int(input("\n1. Add Task\n"
@@ -303,11 +318,12 @@ def main():
             match command:
                 case 1:  # ADD TASK
                     add_task()
-                case 2:  # VIEW TASKS
-                    if(len(lst) == 0):
-                        print("\nThere are no tasks to view")
-                    else:
-                        view_tasks()
+                case 2:  # VIEW TASKS-----------------------------NOT FINISHED
+                    view_tasks()
+                    # if(len(lst) == 0):
+                    #     print("\nThere are no tasks to view")
+                    # else:
+                    #     view_tasks()
                 case 3:  # UPDATE TASK
                     if(len(lst) == 0):
                         print("\nThere are no tasks to update")
