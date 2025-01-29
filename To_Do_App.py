@@ -5,7 +5,8 @@ import json  # NOT FINISHED
 lst = []
 deadline_lst = []
 string_lst = []
-dict_lst = {
+array = []
+dicts = {
             "name" : "",
             "description" : "",
             "tag" : "",
@@ -111,7 +112,7 @@ def add_task():  # NOT FINISHED
 
     with open("Task_Data.json", "a") as outfile:
         for x in range(len(lst)):
-            dict_lst = {
+            dicts = {
                 "name" : lst[x].name,
                 "description" : lst[x].description,
                 "tag" : lst[x].tag,
@@ -120,31 +121,17 @@ def add_task():  # NOT FINISHED
                 "created_date_time" : lst[x].created_date_time,
                 "last_modified_date_time" : lst[x].last_modified_date_time
                 }
-            json.dump(dict_lst, outfile)
-
-    # for x in range(len(lst)):
-    #     string_lst.append(str(lst[x]))
-    # data = str(string_lst)
-    # task_data = open("Task_Data.txt", "a")
-    # task_data.write(data)
-    # task_data.close()
-    # string_lst.clear()
-
-    # string_lst = str(lst)
-    # save = json.dumps(string_lst)
-    # with open("Tasks.json", "w") as outfile:
-    #     json.dump(save, outfile)
+        #array.append(dicts)
+        json.dump(dicts, outfile, indent=4)
+        outfile.close()
   
     
 def view_tasks():  # NOT FINISHED
-    with open("Task_Data.json", "r") as file:
-        load = json.load(file)
+    with open("Task_Data.json") as file:
+        for line in file:
+            load = json.loads(line)
     
     print(load)
-
-    # load = open("Task_Data.json", "r")
-    # print(json.dumps(load, indent=4, separators="} "))
-    # load.close()
 
     # print("\nTASKS:")
     # for x in range(len(lst)):
