@@ -46,7 +46,12 @@ def get_task_number():
 
 
 def get_name():
-    return input("\nName: ")
+    name = input("\nName: ")
+    if(bool(name) == False):
+        print("\nTask must have a name.")
+        return get_name()
+    else:
+        return name
 
 
 def get_description():
