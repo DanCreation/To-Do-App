@@ -1,5 +1,6 @@
 import datetime
-import json  # NOT FINISHED
+import json
+import os.path
 
 
 lst = []
@@ -37,11 +38,13 @@ class Task:
 def get_task_number():
     try:
         task_number = int(input("\nTask Number: "))
-        if(task_number < len(lst) or task_number > len(lst)):
-            raise ValueError("\nInvalid Input.")
-        return task_number
-    except ValueError as e:
-        print(e)
+        if(task_number <= 0 or task_number > len(lst)):
+            print("\nInvalid Task Number.")
+            return get_task_number()
+        else:
+            return task_number
+    except ValueError:
+        print("\nInvalid Input.")
         return get_task_number()
 
 
@@ -110,37 +113,16 @@ def get_status():
         return get_status()
 
 
-def add_task():  # NOT FINISHED
+def add_task():
     lst.append(Task(get_name(), get_description(), get_tag(), get_status(), get_deadline(), 
                     datetime.datetime.now().strftime("%d-%m-%Y %H:%M"), 
                     datetime.datetime.now().strftime("%d-%m-%Y %H:%M")))
 
-    with open("Task_Data.json", "a") as outfile:
-        for x in range(len(lst)):
-            dicts = {
-                "name" : lst[x].name,
-                "description" : lst[x].description,
-                "tag" : lst[x].tag,
-                "status" : lst[x].status,
-                "deadline" : lst[x].deadline,
-                "created_date_time" : lst[x].created_date_time,
-                "last_modified_date_time" : lst[x].last_modified_date_time
-                }
-        #array.append(dicts)
-        json.dump(dicts, outfile, indent=4)
-        outfile.close()
-  
     
-def view_tasks():  # NOT FINISHED
-    with open("Task_Data.json") as file:
-        for line in file:
-            load = json.loads(line)
-    
-    print(load)
-
-    # print("\nTASKS:")
-    # for x in range(len(lst)):
-    #     print("\nTask "+ str(x + 1) + ":", lst[x])
+def view_tasks():
+    print("\nTASKS:")
+    for x in range(len(lst)):
+        print("\nTask "+ str(x + 1) + ":", lst[x])
 
 
 def update_task():
@@ -325,7 +307,16 @@ def search():
         search()
           
         
-def main():  # NOT FINISHED
+def main():
+    if(os.path.isfile("./Task_Data.json")):  # CHECKS IF FILE EXISTS
+        with open("Task_Data.json", "r") as file:
+            load = json.load(file)
+
+        for x in range(len(load)):
+            lst.append(Task(load[x].get("name"), load[x].get("description"), load[x].get("tag"), load[0+x].get("status"), load[x].get("deadline"), 
+                            load[x].get("created_date_time"), 
+                            load[x].get("last_modified_date_time")))
+
     while(True):
         try:
             command = int(input("\n1. Add Task\n"
@@ -333,19 +324,18 @@ def main():  # NOT FINISHED
                             "3. Update Task\n"
                             "4. Delete Task\n"
                             "5. Search Tasks\n"
-                            "6. Exit\n"
+                            "6. Save & Exit\n"
                             "Command: "))
             if(command <= 0 or command > 7):
                 raise ValueError("\nInvalid Input.")
             match command:
                 case 1:  # ADD TASK
                     add_task()
-                case 2:  # VIEW TASKS-----------------------------NOT FINISHED
-                    view_tasks()
-                    # if(len(lst) == 0):
-                    #     print("\nThere are no tasks to view")
-                    # else:
-                    #     view_tasks()
+                case 2:  # VIEW TASKS
+                    if(len(lst) == 0):
+                        print("\nThere are no tasks to view")
+                    else:
+                        view_tasks()
                 case 3:  # UPDATE TASK
                     if(len(lst) == 0):
                         print("\nThere are no tasks to update")
@@ -361,7 +351,21 @@ def main():  # NOT FINISHED
                         print("\nThere are no tasks to search")
                     else:
                         search()
-                case 6:  # EXIT
+                case 6:  # SAVE & EXIT
+                    dict_data = []
+                    with open("Task_Data.json", "w") as outfile:
+                        for x in range(len(lst)):
+                            dicts = {
+                                    "name" : lst[x].name,
+                                    "description" : lst[x].description,
+                                    "tag" : lst[x].tag,
+                                    "status" : lst[x].status,
+                                    "deadline" : lst[x].deadline,
+                                    "created_date_time" : lst[x].created_date_time,
+                                    "last_modified_date_time" : lst[x].last_modified_date_time
+                                    }
+                            dict_data.append(dicts)
+                        json.dump(dict_data, outfile, indent=4,)
                     return False
         except ValueError as e:
             print(e)
