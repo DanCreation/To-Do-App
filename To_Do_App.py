@@ -2,6 +2,11 @@ import datetime
 import json
 import os.path
 
+import tkinter  # NOT FINISHED
+from tkinter.simpledialog import askinteger
+from tkinter import *
+from tkinter import messagebox
+
 
 lst = []
 deadline_lst = []
@@ -307,7 +312,17 @@ def search():
         search()
           
         
-def main():
+def main():  # NOT FINISHED
+    #####################################################################
+    top = tkinter.Tk()  # TESTING GUI
+    top.geometry("200x300")
+    def show():
+        num = askinteger("Input", "Input an Interger")
+        print(num)
+    b = Button(top, text = "Click", command = show)
+    b.place(x=100,y=150)
+    top.mainloop()
+    #####################################################################
     if(os.path.isfile("./Task_Data.json")):  # CHECKS IF FILE EXISTS
         with open("Task_Data.json", "r") as file:
             load = json.load(file)
