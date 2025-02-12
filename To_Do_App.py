@@ -314,14 +314,36 @@ def search():
         
 def main():  # NOT FINISHED
     #####################################################################
-    top = tkinter.Tk()  # TESTING GUI
-    top.geometry("200x300")
+    app_main_window = tkinter.Tk()  # TESTING GUI
+    app_main_window.geometry("500x400")
+    app_main_window.title("To-Do App")
+    app_main_window.config(background="indigo")
+
     def show():
         num = askinteger("Input", "Input an Interger")
         print(num)
-    b = Button(top, text = "Click", command = show)
-    b.place(x=100,y=150)
-    top.mainloop()
+
+    def second_window():
+        app_second_window = tkinter.Tk()
+        app_second_window.geometry("400x300")
+        app_second_window.title("2nd")
+        app_second_window.config(background="green")
+        c = Button(app_second_window, text = "3rd", command = third_window)
+        c.place(x=150,y=100)
+
+    def third_window():
+        app_third_window = tkinter.Tk()
+        app_third_window.geometry("300x200")
+        app_third_window.title("3rd")
+        app_third_window.config(background="blue")
+
+    def test():
+        message = messagebox("Input", "Input a Message")
+        print(message)
+
+    b = Button(app_main_window, text = "2nd", command = second_window)
+    b.place(x=250,y=200)
+    app_main_window.mainloop()
     #####################################################################
     if(os.path.isfile("./Task_Data.json")):  # CHECKS IF FILE EXISTS
         with open("Task_Data.json", "r") as file:
