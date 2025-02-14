@@ -317,31 +317,25 @@ def main():  # NOT FINISHED
     app_main_window = tkinter.Tk()  # TESTING GUI
     app_main_window.geometry("500x400")
     app_main_window.title("To-Do App")
-    app_main_window.config(background="indigo")
+    app_main_window.config(background="silver")
 
-    def show():
-        num = askinteger("Input", "Input an Interger")
-        print(num)
+    def text():
+        y = 0 
+        with open("Task_Data.json", "r") as file:
+            load = json.load(file)
 
-    def second_window():
-        app_second_window = tkinter.Tk()
-        app_second_window.geometry("400x300")
-        app_second_window.title("2nd")
-        app_second_window.config(background="green")
-        c = Button(app_second_window, text = "3rd", command = third_window)
-        c.place(x=150,y=100)
+        for x in range(len(load)):
+            lst.append(Task(load[x].get("name"), load[x].get("description"), load[x].get("tag"), load[0+x].get("status"), load[x].get("deadline"), 
+                            load[x].get("created_date_time"), 
+                            load[x].get("last_modified_date_time")))
 
-    def third_window():
-        app_third_window = tkinter.Tk()
-        app_third_window.geometry("300x200")
-        app_third_window.title("3rd")
-        app_third_window.config(background="blue")
+            label = Label(app_main_window, text=f"{lst[x]}",background="silver", font=("Arial",12, "bold"))
+            label.pack()
+    # def show():
+    #     num = askinteger("Input", "Input an Interger")
+    #     print(num)
 
-    def test():
-        message = messagebox("Input", "Input a Message")
-        print(message)
-
-    b = Button(app_main_window, text = "2nd", command = second_window)
+    b = Button(app_main_window, text = "View Tasks", command = text)
     b.place(x=250,y=200)
     app_main_window.mainloop()
     #####################################################################
