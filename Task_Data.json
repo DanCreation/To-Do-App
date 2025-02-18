@@ -1,38 +1,20 @@
 [
     {
-        "name": "Test 1",
-        "description": "IS SOMETHING BROKEN?",
+        "name": "GUI Test",
+        "description": "Testing the GUI",
         "tag": "Work",
-        "status": "Pending",
-        "deadline": "12-09-2025",
-        "created_date_time": "06-02-2025 16:03",
-        "last_modified_date_time": "06-02-2025 16:21"
-    },
-    {
-        "name": "Test 2",
-        "description": "Testing update time after closing the application",
-        "tag": "Personal",
         "status": "In Progress",
-        "deadline": "23-08-2026",
-        "created_date_time": "06-02-2025 16:03",
-        "last_modified_date_time": "06-02-2025 16:16"
+        "deadline": "12-09-2026",
+        "created_date_time": "18-02-2025 15:34",
+        "last_modified_date_time": "18-02-2025 15:34"
     },
     {
-        "name": "Test 3",
-        "description": "Testing update time before closing the application",
-        "tag": "Urgent",
-        "status": "Completed",
-        "deadline": "23-09-2027",
-        "created_date_time": "06-02-2025 16:04",
-        "last_modified_date_time": "06-02-2025 16:06"
-    },
-    {
-        "name": "Test 4",
-        "description": "NO NOTHING IS BROKEN :)",
-        "tag": "None",
-        "status": "Completed",
-        "deadline": "06-02-2025",
-        "created_date_time": "06-02-2025 16:22",
-        "last_modified_date_time": "06-02-2025 16:22"
+        "name": "GUI Test 2",
+        "description": "Testing the GUI MK.2",
+        "tag": "Work",
+        "status": "In Progress",
+        "deadline": "13-08-2027",
+        "created_date_time": "18-02-2025 16:57",
+        "last_modified_date_time": "18-02-2025 16:57"
     }
 ]

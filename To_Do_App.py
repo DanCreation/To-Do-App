@@ -324,24 +324,44 @@ class Task:
           
 
 def run_app():  # NOT FINISHED
+
+    if(os.path.isfile("./Task_Data.json")):  # CHECKS IF FILE EXISTS
+        with open("Task_Data.json", "r") as file:
+            load = json.load(file)
+
+        for x in range(len(load)):
+            lst.append(Task(load[x].get("name"), load[x].get("description"), load[x].get("tag"), load[0+x].get("status"), load[x].get("deadline"), 
+                            load[x].get("created_date_time"), 
+                            load[x].get("last_modified_date_time")))
+
     app_main_window = tkinter.Tk()
-    app_main_window.geometry("500x400")
+    app_main_window.geometry("600x400")
     app_main_window.title("To-Do App")
     app_main_window.config(background="black")
 
     label_name = Label(app_main_window, text="Name: ", background="black", foreground="green", font=("Arial", 12, "bold"))
     label_name.place(x=130, y=10)
 
-    entry_name = Entry()
+    string_name = tkinter.StringVar()
+    entry_name = Entry(textvariable=string_name)
     entry_name.config(background="green", font=20)
-    entry_name.place(x=240, y=10)
+    entry_name.place(x=330, y=10)
 
-    label_name = Label(app_main_window, text="Description: ", background="black", foreground="green", font=("Arial", 12, "bold"))
-    label_name.place(x=130, y=50)
+    label_description = Label(app_main_window, text="Description: ", background="black", foreground="green", font=("Arial", 12, "bold"))
+    label_description.place(x=130, y=50)
 
-    entry_description = Entry()
+    string_description = tkinter.StringVar()
+    entry_description = Entry(textvariable=string_description)
     entry_description.config(background="green", font=20)
-    entry_description.place(x=240, y=50)
+    entry_description.place(x=330, y=50)
+
+    label_deadline = Label(app_main_window, text="Deadline (dd-mm-yyyy): ", background="black", foreground="green", font=("Arial", 12, "bold"))
+    label_deadline.place(x=130, y=90)
+
+    string_deadline = tkinter.StringVar()
+    entry_deadline = Entry(textvariable=string_deadline)
+    entry_deadline.config(background="green", font=20)
+    entry_deadline.place(x=330, y=90)
 
     def get_task_number():
         try:
@@ -357,7 +377,7 @@ def run_app():  # NOT FINISHED
 
 
     def get_name():
-        name = entry_name
+        name = entry_name.get()
         # name = input("\nName: ")
         if(bool(name) == False):
             print("\nTask must have a name.")
@@ -367,14 +387,15 @@ def run_app():  # NOT FINISHED
 
 
     def get_description():
-        description = entry_description
+        description = entry_description.get()
         return description
         # return input("\nDescription: ")
 
 
     def get_deadline():
         deadline_format = "%d-%m-%Y"
-        deadline = input("\nDeadline (dd-mm-yyyy): ")
+        deadline = entry_deadline.get()
+        #deadline = input("\nDeadline (dd-mm-yyyy): ")
         correct_format = True
         try:
             correct_format == bool(datetime.datetime.strptime(deadline, deadline_format))
@@ -390,7 +411,7 @@ def run_app():  # NOT FINISHED
 
     def get_tag():
         try:
-            tag = int(show())
+            tag = int(show("Tag:\n1. Work\n2.Personal\n3. Urgent\n4. None\nCommand: "))
             #tag = int(input("\nTag:\n1. Work\n2.Personal\n3. Urgent\n4. None\nCommand: "))
             if(tag <= 0 or tag > 4):
                 raise ValueError("\nInvalid Input.")
@@ -410,7 +431,8 @@ def run_app():  # NOT FINISHED
 
     def get_status():
         try:
-            status = int(input("\nStatus:\n1. Pending\n2. In Progress\n3. Completed\nCommand: "))
+            status = int(show("Status:\n1. Pending\n2. In Progress\n3. Completed\nCommand: "))
+            #status = int(input("\nStatus:\n1. Pending\n2. In Progress\n3. Completed\nCommand: "))
             if(status <= 0 or status > 3):
                 raise ValueError("\nInvalid input.")
             if(status == 1): 
@@ -426,9 +448,24 @@ def run_app():  # NOT FINISHED
 
 
     def add_task():  # NOT FINISHED
-        lst.append(Task(get_name(), get_description(), show(), get_status(), get_deadline(), 
+        lst.append(Task(get_name(), get_description(), get_tag(), get_status(), get_deadline(), 
                         datetime.datetime.now().strftime("%d-%m-%Y %H:%M"), 
                         datetime.datetime.now().strftime("%d-%m-%Y %H:%M")))
+
+        dict_data = []
+        with open("Task_Data.json", "w") as outfile:
+            for x in range(len(lst)):
+                dicts = {
+                        "name" : lst[x].name,
+                        "description" : lst[x].description,
+                        "tag" : lst[x].tag,
+                        "status" : lst[x].status,
+                        "deadline" : lst[x].deadline,
+                        "created_date_time" : lst[x].created_date_time,
+                        "last_modified_date_time" : lst[x].last_modified_date_time
+                        }
+                dict_data.append(dicts)
+            json.dump(dict_data, outfile, indent=4,)
 
     
     def view_tasks():
@@ -619,10 +656,20 @@ def run_app():  # NOT FINISHED
             search()
          
     
-    def show():
-        num = askinteger("Input", "Tag:\n1. Work\n2.Personal\n3. Urgent\n4. None\nCommand: ")
-        get_tag(num)
+    def show(string):
+        num = askinteger("Input", string)
+        return num
     
+    
+    string = tkinter.StringVar()
+    test = Entry(textvariable=string)
+    test.config(background="green", font=20)
+    test.place(x=300,y=300)
+
+    def test():
+        yes = string.get()
+        print(yes)
+
     add_task_button = Button(app_main_window, text = "Add Task", background="green", font="bold", command = add_task)
     add_task_button.place(x = 10, y = 10)
     app_main_window.mainloop()
