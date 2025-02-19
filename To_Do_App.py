@@ -339,29 +339,42 @@ def run_app():  # NOT FINISHED
     app_main_window.title("To-Do App")
     app_main_window.config(background="black")
 
-    label_name = Label(app_main_window, text="Name: ", background="black", foreground="green", font=("Arial", 12, "bold"))
-    label_name.place(x=130, y=10)
+    # label_name = Label(app_main_window, text="Name: ", background="black", foreground="green", font=("Arial", 12, "bold"))
+    # label_name.place(x=130, y=10)
 
-    string_name = tkinter.StringVar()
-    entry_name = Entry(textvariable=string_name)
-    entry_name.config(background="green", font=20)
-    entry_name.place(x=330, y=10)
+    # string_name = tkinter.StringVar()
+    # entry_name = Entry(textvariable=string_name)
+    # entry_name.config(background="green", font=20)
+    # entry_name.place(x=330, y=10)
 
-    label_description = Label(app_main_window, text="Description: ", background="black", foreground="green", font=("Arial", 12, "bold"))
-    label_description.place(x=130, y=50)
+    # label_description = Label(app_main_window, text="Description: ", background="black", foreground="green", font=("Arial", 12, "bold"))
+    # label_description.place(x=130, y=50)
 
-    string_description = tkinter.StringVar()
-    entry_description = Entry(textvariable=string_description)
-    entry_description.config(background="green", font=20)
-    entry_description.place(x=330, y=50)
+    # string_description = tkinter.StringVar()
+    # entry_description = Entry(textvariable=string_description)
+    # entry_description.config(background="green", font=20)
+    # entry_description.place(x=330, y=50)
 
-    label_deadline = Label(app_main_window, text="Deadline (dd-mm-yyyy): ", background="black", foreground="green", font=("Arial", 12, "bold"))
-    label_deadline.place(x=130, y=90)
+    # label_deadline = Label(app_main_window, text="Deadline (dd-mm-yyyy): ", background="black", foreground="green", font=("Arial", 12, "bold"))
+    # label_deadline.place(x=130, y=90)
 
-    string_deadline = tkinter.StringVar()
-    entry_deadline = Entry(textvariable=string_deadline)
-    entry_deadline.config(background="green", font=20)
-    entry_deadline.place(x=330, y=90)
+    # string_deadline = tkinter.StringVar()
+    # entry_deadline = Entry(textvariable=string_deadline)
+    # entry_deadline.config(background="green", font=20)
+    # entry_deadline.place(x=330, y=90)
+
+    def get_value(value):  # NOT FINISHED
+        label_value = Label(app_main_window, text=value, background="black", foreground="green", font=("Arial", 12, "bold"))
+        label_value.place(x=130, y=90)
+
+        string_value = tkinter.StringVar()
+        entry_value = Entry(textvariable=string_value)
+        entry_value.config(background="green", font=20)
+        entry_value.place(x=330, y=90)
+        # if(entry_value.get() == True and value == "Name: "):
+        #     return entry_value.get()
+        # else:
+        #     return get_value(value)
 
     def get_task_number():
         try:
@@ -376,8 +389,8 @@ def run_app():  # NOT FINISHED
             return get_task_number()
 
 
-    def get_name():
-        name = entry_name.get()
+    def get_name():  # NOT FINISHED
+        name = lambda : get_value("Name: ")
         # name = input("\nName: ")
         if(bool(name) == False):
             print("\nTask must have a name.")
@@ -386,15 +399,15 @@ def run_app():  # NOT FINISHED
             return name
 
 
-    def get_description():
-        description = entry_description.get()
+    def get_description():  # NOT FINISHED
+        description = get_value("Description: ")
         return description
         # return input("\nDescription: ")
 
 
-    def get_deadline():
+    def get_deadline():  # NOT FINISHED
         deadline_format = "%d-%m-%Y"
-        deadline = entry_deadline.get()
+        deadline = get_value("Deadline (dd-mm-yyyy): ")
         #deadline = input("\nDeadline (dd-mm-yyyy): ")
         correct_format = True
         try:
@@ -409,7 +422,7 @@ def run_app():  # NOT FINISHED
             return get_deadline()
     
 
-    def get_tag():
+    def get_tag():  # NOT FINISHED
         try:
             tag = int(show("Tag:\n1. Work\n2.Personal\n3. Urgent\n4. None\nCommand: "))
             #tag = int(input("\nTag:\n1. Work\n2.Personal\n3. Urgent\n4. None\nCommand: "))
@@ -429,7 +442,7 @@ def run_app():  # NOT FINISHED
             return get_tag(tag)
 
 
-    def get_status():
+    def get_status():  # NOT FINISHED
         try:
             status = int(show("Status:\n1. Pending\n2. In Progress\n3. Completed\nCommand: "))
             #status = int(input("\nStatus:\n1. Pending\n2. In Progress\n3. Completed\nCommand: "))
@@ -661,16 +674,16 @@ def run_app():  # NOT FINISHED
         return num
     
     
-    string = tkinter.StringVar()
-    test = Entry(textvariable=string)
-    test.config(background="green", font=20)
-    test.place(x=300,y=300)
+    # string = tkinter.StringVar()
+    # test = Entry(textvariable=string)
+    # test.config(background="green", font=20)
+    # test.place(x=300,y=300)
 
-    def test():
-        yes = string.get()
-        print(yes)
+    # def test():
+    #     yes = string.get()
+    #     print(yes)
 
-    add_task_button = Button(app_main_window, text = "Add Task", background="green", font="bold", command = add_task)
+    add_task_button = Button(app_main_window, text = "Add Task", background="green", font="bold", command = lambda : get_name())
     add_task_button.place(x = 10, y = 10)
     app_main_window.mainloop()
 
